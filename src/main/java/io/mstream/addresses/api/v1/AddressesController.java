@@ -1,14 +1,19 @@
 package io.mstream.addresses.api.v1;
 
 
+import io.mstream.addresses.api.validation.PostcodeValidator;
+import io.mstream.addresses.api.validation.ValidationException;
+import io.mstream.addresses.api.validation.ValidationResult;
 import io.mstream.addresses.model.AddressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -17,16 +22,27 @@ import java.util.stream.Collectors;
 public class AddressesController {
 
     private final AddressRepository addressRepository;
+    private final PostcodeValidator postcodeValidator;
 
     @Autowired
-    public AddressesController(AddressRepository addressRepository) {
+    public AddressesController(
+            AddressRepository addressRepository,
+            PostcodeValidator postcodeValidator) {
         this.addressRepository = addressRepository;
+        this.postcodeValidator = postcodeValidator;
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/addresses/{postcode}")
-    public List<AddressDto> byPostcode(
+    public ResponseEntity<Set<AddressDto>> byPostcode(
             @PathVariable(name = "postcode") String postcode) {
-        return addressRepository
+
+        ValidationResult validationResult = postcodeValidator.validate(postcode);
+
+        if (!validationResult.isSuccessful()) {
+            throw new ValidationException(validationResult.getViolations());
+        }
+
+        Set<AddressDto> addresses = addressRepository
                 .byPostcode(postcode)
                 .stream()
                 .map(address ->
@@ -34,7 +50,9 @@ public class AddressesController {
                                 address.getPropertyNumber(),
                                 address.getStreetAddress())
                 )
-                .collect(Collectors.toList());
+                .collect(Collectors.toCollection(() -> new LinkedHashSet<>()));
+
+        return ResponseEntity.ok(addresses);
     }
 
 }
