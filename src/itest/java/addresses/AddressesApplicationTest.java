@@ -1,9 +1,12 @@
 package addresses;
 
+import io.mstream.addresses.AddressesApplication;
+import io.mstream.addresses.api.errors.Error;
+import io.mstream.addresses.api.v1.AddressDto;
+import io.mstream.addresses.api.validation.PostcodeValidator;
+import io.mstream.addresses.api.validation.ValidationResult;
 import io.mstream.addresses.model.Address;
 import io.mstream.addresses.model.AddressRepository;
-import io.mstream.addresses.AddressesApplication;
-import io.mstream.addresses.api.v1.AddressDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,16 +37,26 @@ public class AddressesApplicationTest {
             new ParameterizedTypeReference<List<AddressDto>>() {
             };
 
+    private static final ParameterizedTypeReference<List<Error>> LIST_OF_ERRORS =
+            new ParameterizedTypeReference<List<Error>>() {
+            };
+
     private static final String POSTCODE = "POSTCODE";
 
     @Autowired
     private TestRestTemplate restTemplate;
 
     @MockBean
+    private PostcodeValidator postcodeValidator;
+
+    @MockBean
     private AddressRepository addressRepository;
 
     @Test
     public void returnsAddressesListGivenByAddressRepository() {
+
+        when(postcodeValidator.validate(POSTCODE))
+                .thenReturn(ValidationResult.noViolations());
 
         when(addressRepository.byPostcode(POSTCODE)).thenReturn(
                 Arrays.asList(
@@ -69,6 +83,38 @@ public class AddressesApplicationTest {
                 new AddressDto("1", "High Street"),
                 new AddressDto("2", "High Street"),
                 new AddressDto("3", "High Street")
+        );
+    }
+
+    @Test
+    public void showsValidationViolations() {
+
+        when(postcodeValidator.validate(POSTCODE)).thenReturn(
+                ValidationResult.fromViolations(
+                        new HashSet<>(Arrays.asList(
+                                "violation1",
+                                "violation2"
+                        ))
+                )
+        );
+
+        ResponseEntity<List<Error>> response =
+                restTemplate.exchange(
+                        "/api/v1/addresses/{postcode}",
+                        HttpMethod.GET,
+                        null,
+                        LIST_OF_ERRORS,
+                        POSTCODE
+                );
+
+        System.out.println(response.getBody());
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+
+        List<Error> errors = response.getBody();
+
+        assertThat(errors).contains(
+                new Error("VALIDATION", "violation1"),
+                new Error("VALIDATION", "violation2")
         );
     }
 }
