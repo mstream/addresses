@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Objects;
+
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OrdnanceSurveyAddress {
@@ -24,6 +26,32 @@ public class OrdnanceSurveyAddress {
         this.buildingName = buildingName;
         this.thoroughfareName = thoroughfareName;
         this.organisationName = organisationName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OrdnanceSurveyAddress that = (OrdnanceSurveyAddress) o;
+        return Objects.equals(buildingNumber, that.buildingNumber) &&
+                Objects.equals(buildingName, that.buildingName) &&
+                Objects.equals(thoroughfareName, that.thoroughfareName) &&
+                Objects.equals(organisationName, that.organisationName);
+    }
+
+    @Override
+    public String toString() {
+        return "OrdnanceSurveyAddress{" +
+                "buildingNumber='" + buildingNumber + '\'' +
+                ", buildingName='" + buildingName + '\'' +
+                ", thoroughfareName='" + thoroughfareName + '\'' +
+                ", organisationName='" + organisationName + '\'' +
+                '}';
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(buildingNumber, buildingName, thoroughfareName, organisationName);
     }
 
     public String getBuildingNumber() {

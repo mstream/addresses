@@ -7,10 +7,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mstream.addresses.model.Address;
 import io.mstream.addresses.model.AddressRepository;
 import io.mstream.addresses.ordnancesurvey.model.OrdnanceSurveyAddress;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Spliterator;
 import java.util.stream.Collectors;
 
@@ -20,6 +24,9 @@ import static java.util.stream.StreamSupport.stream;
 
 @Component
 public class OrdnanceSurveyAddressRepository implements AddressRepository {
+
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(OrdnanceSurveyAddressRepository.class);
 
     private static final JsonPointer RESULTS_POINTER =
             JsonPointer.compile("/results");
@@ -38,6 +45,7 @@ public class OrdnanceSurveyAddressRepository implements AddressRepository {
 
     private static Address mapAddress(OrdnanceSurveyAddress ordnanceSurveyAddress) {
         return new Address(
+                ordnanceSurveyAddress.getBuildingNumber(),
                 ordnanceSurveyAddress.getBuildingName(),
                 ordnanceSurveyAddress.getThoroughfareName(),
                 ordnanceSurveyAddress.getOrganisationName()
@@ -46,7 +54,16 @@ public class OrdnanceSurveyAddressRepository implements AddressRepository {
 
     @Override
     public List<Address> byPostcode(String postcode) {
-        JsonNode responseNode = ordnanceSurveyClient.addressesForPostcode(postcode);
+        Optional<JsonNode> responseNodeOpt =
+                ordnanceSurveyClient.addressesForPostcode(postcode);
+
+        if (!responseNodeOpt.isPresent()) {
+            LOGGER.warn("Can't get address from the Ordnance Survey API. Falling back to an empty address list");
+            return Collections.emptyList();
+        }
+
+        JsonNode responseNode = responseNodeOpt.get();
+
         return stream(spliteratorUnknownSize(
                 responseNode.at(RESULTS_POINTER).elements(), Spliterator.ORDERED),
                 false

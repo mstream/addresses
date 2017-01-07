@@ -4,6 +4,7 @@ package io.mstream.addresses.api.v1;
 import io.mstream.addresses.api.validation.PostcodeValidator;
 import io.mstream.addresses.api.validation.ValidationException;
 import io.mstream.addresses.api.validation.ValidationResult;
+import io.mstream.addresses.model.Address;
 import io.mstream.addresses.model.AddressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,8 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/api/v1", produces = "application/json")
-public class AddressesController {
+public class
+AddressesController {
 
     private final AddressRepository addressRepository;
     private final PostcodeValidator postcodeValidator;
@@ -30,6 +32,14 @@ public class AddressesController {
             PostcodeValidator postcodeValidator) {
         this.addressRepository = addressRepository;
         this.postcodeValidator = postcodeValidator;
+    }
+
+    private static AddressDto mapAddress(Address address) {
+        return new AddressDto(
+                address.getBuildingNumber(),
+                address.getBuildingName(),
+                address.getStreetName(),
+                address.getBusinessName());
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/addresses/{postcode}")
@@ -48,12 +58,7 @@ public class AddressesController {
         Set<AddressDto> addresses = addressRepository
                 .byPostcode(postcode)
                 .stream()
-                .map(address ->
-                        new AddressDto(
-                                address.getBuildingName(),
-                                address.getStreetName(),
-                                address.getBusinessName())
-                )
+                .map(AddressesController::mapAddress)
                 .collect(Collectors.toCollection(LinkedHashSet::new));
 
         return ResponseEntity.ok(addresses);

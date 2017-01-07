@@ -5,14 +5,17 @@ import java.util.Objects;
 
 public class Address {
 
+    private final String buildingNumber;
     private final String buildingName;
     private final String streetName;
     private final String businessName;
 
     public Address(
+            String buildingNumber,
             String buildingName,
             String streetName,
             String businessName) {
+        this.buildingNumber = buildingNumber;
         this.buildingName = buildingName;
         this.streetName = streetName;
         this.businessName = businessName;
@@ -23,23 +26,29 @@ public class Address {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Address address = (Address) o;
-        return Objects.equals(buildingName, address.buildingName) &&
+        return Objects.equals(buildingNumber, address.buildingNumber) &&
+                Objects.equals(buildingName, address.buildingName) &&
                 Objects.equals(streetName, address.streetName) &&
                 Objects.equals(businessName, address.businessName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(buildingName, streetName, businessName);
+        return Objects.hash(buildingNumber, buildingName, streetName, businessName);
     }
 
     @Override
     public String toString() {
-        return "OrdnanceSurveyAddress{" +
-                "buildingName='" + buildingName + '\'' +
+        return "Address{" +
+                "buildingNumber='" + buildingNumber + '\'' +
+                ", buildingName='" + buildingName + '\'' +
                 ", streetName='" + streetName + '\'' +
                 ", businessName='" + businessName + '\'' +
                 '}';
+    }
+
+    public String getBuildingNumber() {
+        return buildingNumber;
     }
 
     public String getBuildingName() {

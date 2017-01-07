@@ -11,6 +11,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.Optional;
 
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,20 +39,21 @@ public class OrdnanceSurveyOrdnanceSurveyAddressRepositoryTest {
     @Test
     public void mapsValidResponse() throws Exception {
         JsonNode jsonNode = jsonResponse("valid");
-        when(ordnanceSurveyClient.addressesForPostcode(POSTCODE)).thenReturn(jsonNode);
+        when(ordnanceSurveyClient.addressesForPostcode(POSTCODE)).thenReturn(Optional.of(jsonNode));
 
         List<Address> addresses = instance.byPostcode(POSTCODE);
 
         assertThat(addresses).contains(
-                new Address("building1", "street1", "organisation1"),
-                new Address("building2", "street1", null)
+                new Address("1", "building1", "street1", "organisation1"),
+                new Address("2", "building1", "street1", "organisation2"),
+                new Address(null, "building2", "street1", null)
         );
     }
 
     @Test
     public void mapsEmptyResponse() throws Exception {
         JsonNode jsonNode = jsonResponse("empty");
-        when(ordnanceSurveyClient.addressesForPostcode(POSTCODE)).thenReturn(jsonNode);
+        when(ordnanceSurveyClient.addressesForPostcode(POSTCODE)).thenReturn(Optional.of(jsonNode));
 
         List<Address> addresses = instance.byPostcode(POSTCODE);
 
@@ -61,9 +63,18 @@ public class OrdnanceSurveyOrdnanceSurveyAddressRepositoryTest {
     @Test(expected = RuntimeException.class)
     public void handlesInvalidResponse() {
         JsonNode jsonNode = jsonResponse("invalid");
-        when(ordnanceSurveyClient.addressesForPostcode(POSTCODE)).thenReturn(jsonNode);
+        when(ordnanceSurveyClient.addressesForPostcode(POSTCODE)).thenReturn(Optional.of(jsonNode));
 
         instance.byPostcode(POSTCODE);
+    }
+
+    @Test
+    public void handlesMissingResponse() {
+        when(ordnanceSurveyClient.addressesForPostcode(POSTCODE)).thenReturn(Optional.empty());
+
+        List<Address> addresses = instance.byPostcode(POSTCODE);
+
+        assertThat(addresses).isEmpty();
     }
 
     private JsonNode jsonResponse(String name) {

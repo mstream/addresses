@@ -60,9 +60,9 @@ public class AddressesApplicationTest {
 
         when(addressRepository.byPostcode(POSTCODE)).thenReturn(
                 Arrays.asList(
-                        new Address("1", "High Street", null),
-                        new Address("2", "High Street", null),
-                        new Address("3", "High Street", "Tesco Express")
+                        new Address(null, "1A", "High Street", null),
+                        new Address(null, "1B", "High Street", null),
+                        new Address("2", null, "High Street", "Tesco Express")
                 )
         );
 
@@ -80,9 +80,9 @@ public class AddressesApplicationTest {
         List<AddressDto> addresses = response.getBody();
 
         assertThat(addresses).contains(
-                new AddressDto("1", "High Street", null),
-                new AddressDto("2", "High Street", null),
-                new AddressDto("3", "High Street", "Tesco Express")
+                new AddressDto(null, "1A", "High Street", null),
+                new AddressDto(null, "1B", "High Street", null),
+                new AddressDto("2", null, "High Street", "Tesco Express")
         );
     }
 
