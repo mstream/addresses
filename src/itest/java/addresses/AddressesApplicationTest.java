@@ -1,11 +1,14 @@
 package addresses;
 
+import io.mstream.addresses.model.Address;
+import io.mstream.addresses.model.AddressRepository;
 import io.mstream.addresses.AddressesApplication;
-import io.mstream.addresses.api.v1.Address;
+import io.mstream.addresses.api.v1.AddressDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -13,9 +16,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(
@@ -24,33 +29,46 @@ import static org.assertj.core.api.Assertions.assertThat;
 )
 public class AddressesApplicationTest {
 
-    private static final ParameterizedTypeReference<List<Address>> LIST_OF_ADDRESSES =
-            new ParameterizedTypeReference<List<Address>>() {
+    private static final ParameterizedTypeReference<List<AddressDto>> LIST_OF_ADDRESSES =
+            new ParameterizedTypeReference<List<AddressDto>>() {
             };
+
+    private static final String POSTCODE = "POSTCODE";
 
     @Autowired
     private TestRestTemplate restTemplate;
 
-    @Test
-    public void test() {
+    @MockBean
+    private AddressRepository addressRepository;
 
-        ResponseEntity<List<Address>> response =
+    @Test
+    public void returnsAddressesListGivenByAddressRepository() {
+
+        when(addressRepository.byPostcode(POSTCODE)).thenReturn(
+                Arrays.asList(
+                        new Address("1", "High Street"),
+                        new Address("2", "High Street"),
+                        new Address("3", "High Street")
+                )
+        );
+
+        ResponseEntity<List<AddressDto>> response =
                 restTemplate.exchange(
                         "/api/v1/addresses/{postcode}",
                         HttpMethod.GET,
                         null,
                         LIST_OF_ADDRESSES,
-                        "VALID_POSTCODE"
+                        POSTCODE
                 );
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-        List<Address> addresses = response.getBody();
+        List<AddressDto> addresses = response.getBody();
 
         assertThat(addresses).contains(
-                new Address("1", "High Street"),
-                new Address("2", "High Street"),
-                new Address("3", "High Street")
+                new AddressDto("1", "High Street"),
+                new AddressDto("2", "High Street"),
+                new AddressDto("3", "High Street")
         );
     }
 }

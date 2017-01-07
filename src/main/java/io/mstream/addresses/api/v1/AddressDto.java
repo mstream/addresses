@@ -8,14 +8,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Address {
+public class AddressDto {
 
     private final String propertyNumber;
     private final String streetAddress;
     private String businessName;
 
     @JsonCreator
-    public Address(
+    public AddressDto(
             @JsonProperty(value = "propertyNumber") String propertyNumber,
             @JsonProperty(value = "streetAddress") String streetAddress) {
         this.propertyNumber = propertyNumber;
@@ -26,9 +26,9 @@ public class Address {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Address address = (Address) o;
-        return Objects.equals(propertyNumber, address.propertyNumber) &&
-                Objects.equals(streetAddress, address.streetAddress);
+        AddressDto addressDto = (AddressDto) o;
+        return Objects.equals(propertyNumber, addressDto.propertyNumber) &&
+                Objects.equals(streetAddress, addressDto.streetAddress);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class Address {
 
     @Override
     public String toString() {
-        return "Address{" +
+        return "AddressDto{" +
                 "propertyNumber='" + propertyNumber + '\'' +
                 ", streetAddress='" + streetAddress + '\'' +
                 ", businessName='" + businessName + '\'' +
