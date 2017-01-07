@@ -24,7 +24,7 @@ public class ValidationResult {
         return new ValidationResult(violations);
     }
 
-    public boolean isSuccessful() {
+    public boolean isValid() {
         return violations.isEmpty();
     }
 

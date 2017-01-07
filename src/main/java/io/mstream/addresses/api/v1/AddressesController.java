@@ -36,9 +36,12 @@ public class AddressesController {
     public ResponseEntity<Set<AddressDto>> byPostcode(
             @PathVariable(name = "postcode") String postcode) {
 
-        ValidationResult validationResult = postcodeValidator.validate(postcode);
+        String normalizedPostcode = postcode.replaceAll("\\s+", "").toUpperCase();
 
-        if (!validationResult.isSuccessful()) {
+        ValidationResult validationResult =
+                postcodeValidator.validate(normalizedPostcode);
+
+        if (!validationResult.isValid()) {
             throw new ValidationException(validationResult.getViolations());
         }
 
@@ -50,7 +53,7 @@ public class AddressesController {
                                 address.getPropertyNumber(),
                                 address.getStreetAddress())
                 )
-                .collect(Collectors.toCollection(() -> new LinkedHashSet<>()));
+                .collect(Collectors.toCollection(LinkedHashSet::new));
 
         return ResponseEntity.ok(addresses);
     }

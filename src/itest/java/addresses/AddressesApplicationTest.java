@@ -107,7 +107,6 @@ public class AddressesApplicationTest {
                         POSTCODE
                 );
 
-        System.out.println(response.getBody());
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
 
         List<Error> errors = response.getBody();
