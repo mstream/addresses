@@ -1,0 +1,15 @@
+{
+  "header": {
+    "uri": "uri",
+    "query": "query",
+    "offset": 0,
+    "totalresults": 0,
+    "format": "format",
+    "dataset": "dataset",
+    "lr": "lr",
+    "maxresults": 0,
+    "epoch": "epoch",
+    "output_srs": "output_srs"
+  },
+  "results": []
+}

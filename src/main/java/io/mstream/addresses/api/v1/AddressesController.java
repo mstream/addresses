@@ -50,8 +50,9 @@ public class AddressesController {
                 .stream()
                 .map(address ->
                         new AddressDto(
-                                address.getPropertyNumber(),
-                                address.getStreetAddress())
+                                address.getBuildingName(),
+                                address.getStreetName(),
+                                address.getBusinessName())
                 )
                 .collect(Collectors.toCollection(LinkedHashSet::new));
 

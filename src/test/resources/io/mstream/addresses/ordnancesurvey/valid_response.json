@@ -1,0 +1,77 @@
+{
+  "header": {
+    "uri": "uri",
+    "query": "query",
+    "offset": 0,
+    "totalresults": 0,
+    "format": "format",
+    "dataset": "dataset",
+    "lr": "lr",
+    "maxresults": 0,
+    "epoch": "epoch",
+    "output_srs": "output_srs"
+  },
+  "results": [
+    {
+      "DPA": {
+        "UPRN": "UPRN",
+        "UDPRN": "UDPRN",
+        "ADDRESS": "ADDRESS",
+        "ORGANISATION_NAME": "organisation1",
+        "BUILDING_NAME": "building1",
+        "THOROUGHFARE_NAME": "street1",
+        "POST_TOWN": "POST_TOWN",
+        "POSTCODE": "POSTCODE",
+        "RPC": "RPC",
+        "X_COORDINATE": 0.0,
+        "Y_COORDINATE": 0.0,
+        "STATUS": "STATUS",
+        "LOGICAL_STATUS_CODE": "LOGICAL_STATUS_CODE",
+        "CLASSIFICATION_CODE": "CLASSIFICATION_CODE",
+        "CLASSIFICATION_CODE_DESCRIPTION": "CLASSIFICATION_CODE_DESCRIPTION",
+        "LOCAL_CUSTODIAN_CODE": 0,
+        "LOCAL_CUSTODIAN_CODE_DESCRIPTION": "LOCAL_CUSTODIAN_CODE_DESCRIPTION",
+        "POSTAL_ADDRESS_CODE": "POSTAL_ADDRESS_CODE",
+        "POSTAL_ADDRESS_CODE_DESCRIPTION": "POSTAL_ADDRESS_CODE_DESCRIPTION",
+        "BLPU_STATE_CODE_DESCRIPTION": "BLPU_STATE_CODE_DESCRIPTION",
+        "TOPOGRAPHY_LAYER_TOID": "TOPOGRAPHY_LAYER_TOID",
+        "PARENT_UPRN": "PARENT_UPRN",
+        "LAST_UPDATE_DATE": "LAST_UPDATE_DATE",
+        "ENTRY_DATE": "ENTRY_DATE",
+        "LANGUAGE": "LANGUAGE",
+        "MATCH": 0.0,
+        "MATCH_DESCRIPTION": "MATCH_DESCRIPTION"
+      }
+    },
+    {
+      "DPA": {
+        "UPRN": "UPRN",
+        "UDPRN": "UDPRN",
+        "ADDRESS": "ADDRESS",
+        "BUILDING_NAME": "building2",
+        "THOROUGHFARE_NAME": "street1",
+        "POST_TOWN": "POST_TOWN",
+        "POSTCODE": "POSTCODE",
+        "RPC": "RPC",
+        "X_COORDINATE": 0.0,
+        "Y_COORDINATE": 0.0,
+        "STATUS": "STATUS",
+        "LOGICAL_STATUS_CODE": "LOGICAL_STATUS_CODE",
+        "CLASSIFICATION_CODE": "CLASSIFICATION_CODE",
+        "CLASSIFICATION_CODE_DESCRIPTION": "CLASSIFICATION_CODE_DESCRIPTION",
+        "LOCAL_CUSTODIAN_CODE": 0,
+        "LOCAL_CUSTODIAN_CODE_DESCRIPTION": "LOCAL_CUSTODIAN_CODE_DESCRIPTION",
+        "POSTAL_ADDRESS_CODE": "POSTAL_ADDRESS_CODE",
+        "POSTAL_ADDRESS_CODE_DESCRIPTION": "POSTAL_ADDRESS_CODE_DESCRIPTION",
+        "BLPU_STATE_CODE_DESCRIPTION": "BLPU_STATE_CODE_DESCRIPTION",
+        "TOPOGRAPHY_LAYER_TOID": "TOPOGRAPHY_LAYER_TOID",
+        "PARENT_UPRN": "PARENT_UPRN",
+        "LAST_UPDATE_DATE": "LAST_UPDATE_DATE",
+        "ENTRY_DATE": "ENTRY_DATE",
+        "LANGUAGE": "LANGUAGE",
+        "MATCH": 0.0,
+        "MATCH_DESCRIPTION": "MATCH_DESCRIPTION"
+      }
+    }
+  ]
+}

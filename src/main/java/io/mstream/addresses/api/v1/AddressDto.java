@@ -10,54 +10,54 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AddressDto {
 
-    private final String propertyNumber;
-    private final String streetAddress;
-    private String businessName;
+
+    private final String buildingName;
+    private final String streetName;
+    private final String businessName;
 
     @JsonCreator
     public AddressDto(
-            @JsonProperty(value = "propertyNumber") String propertyNumber,
-            @JsonProperty(value = "streetAddress") String streetAddress) {
-        this.propertyNumber = propertyNumber;
-        this.streetAddress = streetAddress;
+            @JsonProperty(value = "buildingName", required = true) String buildingName,
+            @JsonProperty(value = "streetName", required = true) String streetName,
+            @JsonProperty(value = "businessName") String businessName) {
+        this.buildingName = buildingName;
+        this.streetName = streetName;
+        this.businessName = businessName;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AddressDto addressDto = (AddressDto) o;
-        return Objects.equals(propertyNumber, addressDto.propertyNumber) &&
-                Objects.equals(streetAddress, addressDto.streetAddress);
+        AddressDto address = (AddressDto) o;
+        return Objects.equals(buildingName, address.buildingName) &&
+                Objects.equals(streetName, address.streetName) &&
+                Objects.equals(businessName, address.businessName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(propertyNumber, streetAddress);
+        return Objects.hash(buildingName, streetName, businessName);
     }
 
     @Override
     public String toString() {
-        return "AddressDto{" +
-                "propertyNumber='" + propertyNumber + '\'' +
-                ", streetAddress='" + streetAddress + '\'' +
+        return "OrdnanceSurveyAddress{" +
+                "buildingName='" + buildingName + '\'' +
+                ", streetName='" + streetName + '\'' +
                 ", businessName='" + businessName + '\'' +
                 '}';
     }
 
-    public String getPropertyNumber() {
-        return propertyNumber;
+    public String getBuildingName() {
+        return buildingName;
     }
 
-    public String getStreetAddress() {
-        return streetAddress;
+    public String getStreetName() {
+        return streetName;
     }
 
     public String getBusinessName() {
         return businessName;
-    }
-
-    public void setBusinessName(String businessName) {
-        this.businessName = businessName;
     }
 }
