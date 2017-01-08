@@ -116,4 +116,28 @@ public class AddressesApplicationTest {
                 new Error("VALIDATION", "violation2")
         );
     }
+
+    @Test
+    public void shouldFallbackToEmptyAddressListDuringCommunicationErrors() {
+
+        when(postcodeValidator.validate(POSTCODE))
+                .thenReturn(ValidationResult.noViolations());
+
+        when(addressRepository.byPostcode(POSTCODE)).thenThrow(new RuntimeException());
+
+        ResponseEntity<List<AddressDto>> response =
+                restTemplate.exchange(
+                        "/api/v1/addresses/{postcode}",
+                        HttpMethod.GET,
+                        null,
+                        LIST_OF_ADDRESSES,
+                        POSTCODE
+                );
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        List<AddressDto> addresses = response.getBody();
+
+        assertThat(addresses).isEmpty();
+    }
 }
