@@ -19,7 +19,7 @@ public class AddressDto {
     public AddressDto(
             @JsonProperty(value = "buildingNumber") String buildingNumber,
             @JsonProperty(value = "buildingName") String buildingName,
-            @JsonProperty(value = "streetName") String streetName,
+            @JsonProperty(value = "streetName", required = true) String streetName,
             @JsonProperty(value = "businessName") String businessName) {
         this.buildingNumber = buildingNumber;
         this.buildingName = buildingName;
