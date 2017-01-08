@@ -40,7 +40,6 @@ public class PostcodeValidator implements Validator<String> {
 
     private final Pattern postcodePattern;
 
-    @Autowired
     public PostcodeValidator() {
         String postcodeFormatsRegex = POSTCODE_FORMATS
                 .stream()
